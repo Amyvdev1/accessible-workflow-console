@@ -27,7 +27,7 @@ AccessPath is a self-directed front-end code sample that uses a small request wo
 | [`tests/AccessPathApp.test.tsx`](tests/AccessPathApp.test.tsx) | Checks an axe scan, invalid form feedback, and an announced status transition. |
 | [`src/main.tsx`](src/main.tsx) | Mounts the React app under StrictMode and enables development-mode axe checks. |
 | [`vite.config.ts`](vite.config.ts) | Declares the Vite React setup plus jsdom/Vitest test configuration. |
-| [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) | Defines a GitHub Pages build-and-publish workflow. |
+| [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) | Runs accessibility and interaction regression tests plus a production build before a main-branch GitHub Pages deployment. |
 
 Read the [technical code tour](docs/CODE_TOUR.md) for source-level behavior and testing boundaries.
 
@@ -45,7 +45,7 @@ pnpm test:run
 pnpm build
 ```
 
-The inspected local toolchain passed **three tests**, TypeScript compilation, and a Vite production build. These checks are targeted regression signals; they are not a substitute for a full manual accessibility evaluation.
+The inspected local toolchain passed **three tests**, TypeScript compilation, and a Vite production build. The [GitHub Actions workflow](https://github.com/Amyvdev1/accessible-workflow-console/actions) runs the same automated verification before a main-branch GitHub Pages deployment. These checks are targeted regression signals; they are not a substitute for a full manual accessibility evaluation.
 
 ## Intentional boundaries
 
