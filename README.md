@@ -1,35 +1,94 @@
 # AccessPath Console
 
-> **A React + TypeScript accessibility-practice workboard built around semantic structure, keyboard-operable controls, useful error recovery, and live status feedback.**
+> **Product engineering + accessibility with keyboard-first interaction, recovery, semantic structure, and visible state feedback.**
 
-[Portfolio walkthrough](https://amy-villa-signal-gallery.vercel.app/projects/accesspath-console) · [Amy Villa on GitHub](https://github.com/Amyvdev1) · [Contact Amy](mailto:amyv.dev@gmail.com)
+[Source](https://github.com/Amyvdev1/accessible-workflow-console) · [Amy Villa on GitHub](https://github.com/Amyvdev1) · [Contact](mailto:amyv.dev@gmail.com)
 
-AccessPath is a self-directed front-end code sample that uses a small request workflow to practice implementation-level accessibility. A person can select a request, move it from **New → In review → Ready**, and create a request through a labelled form with visible recovery guidance.
+## What it solves
 
-## What Amy built
+AccessPath demonstrates how a small workflow interface can remain understandable and operable when users navigate by keyboard, encounter validation errors, change state, or need status feedback without hidden interaction requirements.
 
-| Practice area | Implementation evidence |
+## Why it exists
+
+Accessibility is easiest to discuss when it is attached to real product behavior. AccessPath uses a request workboard to make implementation choices visible: native controls, semantic regions, focus treatment, form recovery, live announcements, responsive layout, and targeted automated checks.
+
+## Live demo
+
+**Production deployment: pending.** The interface runs locally without accounts, API keys, backend services, or external data. Automated tests and a production Vite build protect the documented behavior until a stable public deployment is attached.
+
+## Architecture
+
+```text
+Browser
+  │
+  ▼
+React + TypeScript application
+  ├── semantic navigation + regions
+  ├── request selection
+  ├── explicit local workflow state
+  ├── labelled create-request form
+  ├── validation + recovery guidance
+  └── live status feedback
+  │
+  ▼
+Local React state
+  └── resets on refresh
+```
+
+### Stack
+
+**React · TypeScript · Semantic HTML · CSS · Vite · Vitest · Testing Library · jest-axe · @axe-core/react · GitHub Actions**
+
+## Key engineering decisions
+
+| Decision | Why it is here |
 |---|---|
-| **Semantic navigation** | Skip link, `header`, labelled `nav`, `main`, labelled sections, heading order, lists, definition lists, and footer. |
-| **Keyboard-first controls** | Native buttons for request selection and one-step workflow transitions; no drag-and-drop interaction is required. |
-| **Visible focus** | A deliberate `:focus-visible` treatment and a focus-revealed skip link work against both light and dark surfaces. |
-| **Form recovery** | Persistent label and help text, title trimming, minimum-length validation, `aria-invalid`, conditional `aria-describedby`, and `role="alert"` errors. |
-| **Live feedback** | A polite status region announces selection, state transitions, successful creation, and validation failure without unnecessary focus movement. |
-| **Responsive layout** | Grid-based workspace and board layouts reflow through documented responsive breakpoints. |
-| **Automated checks** | Vitest, Testing Library, jest-axe, and development-only `@axe-core/react` provide focused automated regression signals. |
+| **Native buttons instead of drag-and-drop** | Keeps request selection and state progression keyboard-operable without an alternate interaction mode. |
+| **Semantic landmarks and heading structure** | Gives the workboard an understandable document and navigation structure. |
+| **Persistent labels/help text** | Error recovery does not depend on placeholder text or visual memory. |
+| **`aria-invalid` + conditional `aria-describedby`** | Connects invalid state to the relevant recovery guidance. |
+| **Polite live status region** | Announces selection, state changes, successful creation, and validation failure without unnecessary focus movement. |
+| **Deliberate `:focus-visible` treatment** | Makes keyboard position visible across light and dark surfaces. |
+| **Targeted automated accessibility checks** | Catches a useful subset of regressions while explicitly avoiding a false claim of full conformance. |
 
-## Code map
+## Failure & recovery behavior
 
-| File / area | What it does |
-|---|---|
-| [`src/AccessPathApp.tsx`](src/AccessPathApp.tsx) | Holds the typed request model, local state, status progression, selection behavior, validation, semantic UI, and live feedback. |
-| [`src/styles.css`](src/styles.css) | Defines focus visibility, skip-link reveal, surfaces, grids, typography, responsive behavior, and reduced-motion handling. |
-| [`tests/AccessPathApp.test.tsx`](tests/AccessPathApp.test.tsx) | Checks an axe scan, invalid form feedback, and an announced status transition. |
-| [`src/main.tsx`](src/main.tsx) | Mounts the React app under StrictMode and enables development-mode axe checks. |
-| [`vite.config.ts`](vite.config.ts) | Declares the Vite React setup plus jsdom/Vitest test configuration. |
-| [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) | Runs accessibility and interaction regression tests plus a production build on pushes and pull requests. |
+The interface treats failure as part of the product flow:
 
-Read the [technical code tour](docs/CODE_TOUR.md) for source-level behavior and testing boundaries.
+- too-short request title → persistent validation message and `aria-invalid`,
+- recovery guidance is associated with the field instead of shown as detached copy,
+- failed validation is announced through the status/error surface,
+- state changes remain one-step native-button actions,
+- selected request and workflow status remain visible after interaction.
+
+No interaction requires drag-and-drop, hover-only controls, or hidden keyboard shortcuts.
+
+## Testing & CI
+
+```bash
+pnpm install
+pnpm test:run
+pnpm build
+```
+
+The focused suite checks an axe scan, invalid form feedback, and an announced status transition. TypeScript compilation and the Vite production build are included in the repository verification path. GitHub Actions repeats the automated checks on pushes and pull requests.
+
+These checks are **regression signals**, not a substitute for manual keyboard, screen-reader, zoom, browser/device, content, or design review.
+
+## Security / evidence boundaries
+
+AccessPath is an **independent accessibility-practice engineering sample**. It is not client work, production software, a federal application, or a claim of WCAG/Section 508 conformance.
+
+The data lives only in local React state and resets on refresh. The project has no backend, database, authentication, API client, persistence layer, external service integration, or production user data.
+
+## 5-minute code review path
+
+1. [`src/AccessPathApp.tsx`](src/AccessPathApp.tsx) — typed request model, local state, workflow transitions, form validation, semantic UI, and live feedback.
+2. [`tests/AccessPathApp.test.tsx`](tests/AccessPathApp.test.tsx) — axe signal, invalid-form recovery, and announced state transition.
+3. [`src/styles.css`](src/styles.css) — focus visibility, skip-link reveal, responsive layout, and reduced-motion behavior.
+4. [`src/main.tsx`](src/main.tsx) — React StrictMode mount and development-only axe checks.
+5. [`docs/CODE_TOUR.md`](docs/CODE_TOUR.md) — source-level behavior and testing boundaries.
+6. [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) — automated verification and build path.
 
 ## Run locally
 
@@ -38,23 +97,12 @@ pnpm install
 pnpm dev
 ```
 
-## Run the checks
+Open the Vite development URL shown in the terminal and use the interface entirely by keyboard to inspect the core interaction path.
 
-```bash
-pnpm test:run
-pnpm build
-```
-
-The inspected local toolchain passed **three tests**, TypeScript compilation, and a Vite production build. The [GitHub Actions workflow](https://github.com/Amyvdev1/accessible-workflow-console/actions) runs the same automated verification on pushes and pull requests. These checks are targeted regression signals; they are not a substitute for a full manual accessibility evaluation.
-
-## Intentional boundaries
-
-This is a **personal accessibility-practice code sample**. It is not client work, production software, a federal application, or a claim of WCAG or Section 508 conformance. The data is local React state and resets on refresh. The project has no backend, database, authentication, API client, persistence layer, or external service integration. A real product would still need manual keyboard, screen-reader, zoom, browser/device, content, and design review.
-
-## Reference material
+## Reference boundary
 
 The [W3C WCAG overview](https://www.w3.org/WAI/standards-guidelines/wcag/) frames accessible web content around perceivable, operable, understandable, and robust requirements. AccessPath practices a limited set of implementation patterns within that broader discipline.
 
 ---
 
-Created by **Amy Villa** as a focused front-end accessibility practice project.
+Built by **Amy Villa** as an inspectable Product Engineering & Accessibility sample.
