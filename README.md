@@ -1,3 +1,12 @@
+# AccessPath Console — Resilient Operator UI & Accessible Error Recovery
+**Stack:** React • TypeScript • Playwright E2E • Automated Accessibility & UI State Testing
+
+### Architectural Overview
+**AccessPath Console** demonstrates how mission-critical operator dashboards should handle degraded backend states, network interruptions, and validation failures without losing user input—while maintaining strict keyboard navigation, focus management, and screen-reader semantics.
+
+
+---
+
 # AccessPath Console
 
 > **Product engineering + accessibility with keyboard-first interaction, recovery, semantic structure, and visible state feedback.**
